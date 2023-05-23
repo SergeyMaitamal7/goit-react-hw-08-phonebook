@@ -1,9 +1,9 @@
 import { Label } from 'components/FormContact/FormContact.styled';
 import { Title, Input } from './Filter.styled';
 import { useDispatch } from 'react-redux';
-import { setFilter } from 'redux/filterSlice';
+import { setFilter } from 'redux/contacts/filterSlice';
 
-export const Filter = () => {
+export default function Filter() {
   const dispatch = useDispatch();
   const changeFilter = e => {
     const filter = e.currentTarget.value;
@@ -18,6 +18,4 @@ export const Filter = () => {
       </Label>
     </>
   );
-};
-
-
+}

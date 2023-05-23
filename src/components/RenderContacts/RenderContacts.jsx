@@ -1,24 +1,19 @@
-import { ItemContact } from 'components/Contact/Contact';
+import ItemContact from 'components/Contact/Contact';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteContact } from '../../redux/operation';
+import { deleteContact, fetchContacts } from '../../redux/contacts/operation';
 import { List, Button, Wrapper } from './RenderContacts.styled';
 import PropTypes from 'prop-types';
-import { getContacts, getFilter } from 'redux/selector';
-import * as contactsOperations from '../../redux/operation';
+import { getContacts, getFilter } from 'redux/contacts/selector';
 
-export const RenderContacts = () => {
+export default function RenderContacts() {
   const contacts = useSelector(getContacts);
   const filters = useSelector(getFilter);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(contactsOperations.fetchContacts());
+    dispatch(fetchContacts());
   }, [dispatch]);
-
-  // console.log(contacts);
-  // if (!contacts) return;
-  
 
   const visibleContacts = contacts.filter(contact =>
     contact.name.toLowerCase().includes(filters.toLowerCase())
@@ -36,7 +31,7 @@ export const RenderContacts = () => {
       ))}
     </List>
   );
-};
+}
 
 RenderContacts.prototype = {
   contacts: PropTypes.arrayOf(
