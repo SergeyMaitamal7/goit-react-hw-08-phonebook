@@ -2,10 +2,11 @@ import { Contact } from './Contact.styled';
 import PropTypes from 'prop-types';
 
 export default function ItemContact ({ contact }) {
+ console.log(contact)
   return (
     <>
       <Contact type="button" name={contact.name}>
-        {contact.name} : {contact.phone}
+        {contact.name} : {contact.number}
       </Contact>
     </>
   );

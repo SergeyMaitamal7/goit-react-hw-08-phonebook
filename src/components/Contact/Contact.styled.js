@@ -8,4 +8,7 @@ export const Wrapper = styled.div`
   font-size: 18px;
 `;
 
-export const Contact = styled.p``;
+export const Contact = styled.p`
+  font-family: 'Poboto';
+  font-weight: 600px;
+`;

@@ -1,6 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchContacts, deleteContact, addContact } from './operation';
-
+import {
+  fetchContacts,
+  replaceContact,
+  deleteContact,
+  addContact,
+} from './operation';
+import { logOut } from 'redux/auth/authOperations';
 const contactsInitialState = {
   items: [],
   isLoading: false,
@@ -16,6 +21,8 @@ export const contactsSlice = createSlice({
     [fetchContacts.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.items = action.payload;
+      state.error = null;
+      console.log(state);
     },
     [fetchContacts.rejected]: (state, action) => {
       state.isLoading = false;
@@ -28,6 +35,9 @@ export const contactsSlice = createSlice({
     [addContact.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.items.push(action.payload);
+      state.isLoading = false;
+      state.error = null;
+      console.log(action);
     },
     [addContact.rejected]: (state, action) => {
       state.isLoading = false;
@@ -38,14 +48,27 @@ export const contactsSlice = createSlice({
       state.isLoading = true;
     },
     [deleteContact.fulfilled]: (state, action) => {
-      console.log(action.payload.id);
       state.isLoading = false;
       const indexDeleteElement = state.items.findIndex(
         item => item.id === action.payload.id
       );
       state.items.splice(indexDeleteElement, 1);
+      state.error = null;
     },
-    [addContact.rejected]: (state, action) => {
+    [deleteContact.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+
+    [logOut.pending]: (state, action) => {
+      state.isLoading = false;
+    },
+    [logOut.fulfilled]: (state, action) => {
+      state.items = [];
+      state.error = null;
+      state.isLoading = false;
+    },
+    [logOut.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },

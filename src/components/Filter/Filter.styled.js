@@ -8,6 +8,7 @@ export const Title = styled.h2`
 export const Input = styled.input`
   display: block;
   width: 350px;
+  margin-left: 25px;
   padding: 5px;
   font-size: 16px;
   border-radius: 4px;
