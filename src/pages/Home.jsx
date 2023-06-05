@@ -1,6 +1,5 @@
-import FormRegistration from 'components/FormRegisration/FormRegistration';
+import About from 'components/About/About';
+
 export default function Home() {
-  return (
-    <div>Hello!</div>
-  );
+  return <About />;
 }

@@ -1,65 +1,93 @@
-import { Label, SubmitForm, Box, Input } from '../FormLogin/FormLogin.styled';
+import { Form, Box, Container } from '../FormLogin/FormLogin.styled';
 import { Registrarion } from './FormRegistration.styled';
 import { Button } from '@mui/material';
+import TextField from '@mui/material/TextField';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { register } from 'redux/auth/authOperations';
+import { useFormik } from 'formik';
 import PropTypes from 'prop-types';
-import { Formik } from 'formik';
 
-const schema = Yup.object().shape({
+const validationSchema = Yup.object().shape({
   name: Yup.string().min(3).max(16).required(),
   email: Yup.string().email().required(),
   password: Yup.string().min(6).max(32).required(),
 });
 
-const initialValues = {
-  name: '',
-  email: '',
-  password: '',
-};
-
 export default function FormRegistration() {
   const dispatch = useDispatch();
 
-  const onSubmitInner = (value, { resetForm }) => {
-    dispatch(register(value));
-    resetForm();
-  };
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      email: '',
+      password: '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: values => {
+      dispatch(register(values));
+    },
+  });
 
   return (
     <Box>
-      <Registrarion>Registration</Registrarion>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={schema}
-        onSubmit={onSubmitInner}
-      >
-        {({ errors, touched, isValid, dirty }) => (
-          <SubmitForm>
-            <Label htmlFor="name">Name</Label>
-            <Input id="name" name="name" placeholder="Enter Name" />
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              placeholder="Enter email"
-              fullWidth
-            />
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" name="password" placeholder="Enter password" />
-
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{ marginTop: 2 }}
-              fullWidth
-            >
-              Login
-            </Button>
-          </SubmitForm>
-        )}
-      </Formik>
+      <Container>
+        <Registrarion>Register</Registrarion>
+      </Container>
+      <Form onSubmit={formik.handleSubmit}>
+        <TextField
+          id="name"
+          name="name"
+          label="Name"
+          placeholder="Enter your name"
+          margin="none"
+          fullWidth
+          sx={{
+            height: 50,
+            marginBottom: 3,
+          }}
+          value={formik.values.name}
+          onChange={formik.handleChange}
+          error={formik.touched.name && Boolean(formik.errors.name)}
+          helperText={formik.touched.name && formik.errors.name}
+        />
+        <TextField
+          id="email"
+          name="email"
+          label="Email"
+          placeholder="Enter your email"
+          margin="none"
+          fullWidth
+          sx={{
+            height: 50,
+            marginBottom: 3,
+          }}
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          error={formik.touched.email && Boolean(formik.errors.email)}
+          helperText={formik.touched.email && formik.errors.email}
+        />
+        <TextField
+          id="password"
+          name="password"
+          label="Password"
+          type="password"
+          placeholder="Enter your password"
+          margin="none"
+          fullWidth
+          sx={{
+            height: 50,
+            marginBottom: 3,
+          }}
+          value={formik.values.password}
+          onChange={formik.handleChange}
+          error={formik.touched.password && Boolean(formik.errors.password)}
+          helperText={formik.touched.password && formik.errors.password}
+        />
+        <Button color="primary" variant="contained" fullWidth type="submit">
+          Register
+        </Button>
+      </Form>
     </Box>
   );
 }

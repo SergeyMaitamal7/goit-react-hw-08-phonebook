@@ -1,59 +1,72 @@
-import { Label, SubmitForm, Box, Login, Input } from '../FormLogin/FormLogin.styled';
-import Button from '@mui/material/Button';
+import { Form, Box, Login, Container } from '../FormLogin/FormLogin.styled';
+// import Button from '@mui/material/Button';
+import { Button } from '@mui/material';
+import TextField from '@mui/material/TextField';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Formik } from 'formik';
+import { useFormik } from 'formik';
 import { logIn } from 'redux/auth/authOperations';
 
-
-const schema = Yup.object().shape({
+const validationSchema = Yup.object().shape({
   email: Yup.string().email().required(),
   password: Yup.string().min(6).max(32).required(),
 });
 
-const initialValues = {
-  email: '',
-  password: '',
-};
-
 export default function FormLogin() {
   const dispatch = useDispatch();
 
-  const onSubmitInner = (value, { resetForm }) => {
-    dispatch(logIn(value));
-    resetForm();
-  };
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: values => {
+      dispatch(logIn( values));
+    },
+  });
 
   return (
     <Box>
-      <Login>Login</Login>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={schema}
-        onSubmit={onSubmitInner}
-      >
-        {({ errors, touched, isValid, dirty }) => (
-          <SubmitForm>
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              placeholder="Enter email number"
-            />
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              name="password"
-              placeholder="Enter your password"
-            />
-
-            <Button type="submit" variant="contained" sx={{ marginTop: 2 }} fullWidth>
-              Login
-            </Button>
-          </SubmitForm>
-        )}
-      </Formik>
+      <Container>
+        <Login>Login</Login>
+      </Container>
+      <Form onSubmit={formik.handleSubmit}>
+        <TextField
+          id="email"
+          name="email"
+          label="Email"
+          placeholder="Enter your email"
+          margin="none"
+          fullWidth
+          sx={{
+            height: 50,
+            marginBottom: 3,
+          }}
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          error={formik.touched.email && Boolean(formik.errors.email)}
+          helperText={formik.touched.email && formik.errors.email}
+        />
+        <TextField
+          id="password"
+          name="password"
+          label="Password"
+          type="password"
+          placeholder="Enter your password"
+          margin="none"
+          fullWidth
+          sx={{ height: 50, marginBottom: 3 }}
+          value={formik.values.password}
+          onChange={formik.handleChange}
+          error={formik.touched.password && Boolean(formik.errors.password)}
+          helperText={formik.touched.password && formik.errors.password}
+        />
+        <Button type="submit" color="primary" variant="contained" fullWidth>
+          Login
+        </Button>
+      </Form>
     </Box>
   );
 }

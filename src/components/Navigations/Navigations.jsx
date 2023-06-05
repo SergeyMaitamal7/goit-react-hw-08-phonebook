@@ -1,4 +1,4 @@
-import { Link } from './Navigations.styled'
+import { Link } from './Navigations.styled';
 import { useSelector } from 'react-redux';
 import { IsLoggedIn } from 'redux/auth/authSelectors.js';
 
@@ -7,7 +7,7 @@ export default function Navigations() {
   return (
     <nav>
       <Link to="/">Home</Link>
-      <Link to="/contacts">Contacts</Link>
+      {isLoggedIn && <Link to="/contacts">Contacts</Link>}
     </nav>
   );
 }
